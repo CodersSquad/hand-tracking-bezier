@@ -172,7 +172,7 @@ def main():
                     point_history_classifier_labels[most_common_fg_id[0][0]],
                 )
 
-                debug_image = draw_circle(
+                get_bezier_points(
                     debug_image,
                     brect,
                     handedness,
@@ -185,6 +185,11 @@ def main():
 
         debug_image = draw_point_history(debug_image, point_history)
         debug_image = draw_info(debug_image, fps, mode, number)
+
+        if point1[0] != 0:
+            cv.circle(debug_image, point1, 30, (0,0,255), -1)
+        if point2[0] != 0:
+            cv.circle(debug_image, point2, 30, (255,0,0), -1)
 
         # 画面反映 #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
@@ -506,10 +511,11 @@ def draw_bounding_rect(use_brect, image, brect):
 point1 = (0,0)
 point2 = (0,0)
 
-def draw_circle(image, brect, handedness, hand_sign_text,
-                   finger_gesture_text):
+def get_bezier_points(image, brect, handedness, hand_sign_text,
+                      finger_gesture_text):
 
     global point1, point2
+
     # Mid Point
     x_m_point = (brect[0] + brect[2])/2
     y_m_point = (brect[1] + brect[3])/2
@@ -525,16 +531,10 @@ def draw_circle(image, brect, handedness, hand_sign_text,
     if "Open" in hand_sign_text:
         thickness = 4
     if "Close" in hand_sign_text:
-        thickness = -1
         if point1 == (0,0):
             point1 = mid_point
-
-    print(point1)
-    if (point1[0] > radius and point1[1] > radius and point1):
-        print(x_m_point, y_m_point)
-        cv.circle(image, point1, radius, color, thickness)
-
-    return image
+        elif point2 == (0,0):
+            point2 = mid_point
 
 
 def draw_info_text(image, brect, handedness, hand_sign_text,
