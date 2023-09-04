@@ -190,6 +190,10 @@ def main():
             cv.circle(debug_image, point1, 30, (0,0,255), -1)
         if point2[0] != 0:
             cv.circle(debug_image, point2, 30, (255,0,0), -1)
+        if point3[0] != 0:
+            cv.circle(debug_image, point3, 30, (0,255,0), -1)
+        if point4[0] != 0:
+            cv.circle(debug_image, point4, 30, (255,255,0), -1)
 
         # 画面反映 #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
@@ -510,12 +514,14 @@ def draw_bounding_rect(use_brect, image, brect):
 
 point1 = (0,0)
 point2 = (0,0)
+point3 = (0,0)
+point4 = (0,0)
 open_hand = True
 
 def get_bezier_points(image, brect, handedness, hand_sign_text,
                       finger_gesture_text):
 
-    global point1, point2, open_hand
+    global point1, point2, point3, point4, open_hand
 
     # Mid Point
     x_m_point = (brect[0] + brect[2])/2
@@ -535,6 +541,10 @@ def get_bezier_points(image, brect, handedness, hand_sign_text,
                 point1 = mid_point
             elif point2 == (0,0):
                 point2 = mid_point
+            elif point3 == (0,0):
+                point3 = mid_point
+            elif point4 == (0,0):
+                point4 = mid_point
             open_hand = False
 
     print(point2)
