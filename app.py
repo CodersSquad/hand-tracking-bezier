@@ -527,8 +527,6 @@ def get_bezier_points(image, brect, handedness, hand_sign_text,
     # Red color in BGR
     color = (0, 0, 255)
 
-    # Line thickness
-    thickness = 0
     if "Open" in hand_sign_text:
         open_hand = True
     if "Close" in hand_sign_text:
