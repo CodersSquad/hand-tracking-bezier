@@ -510,11 +510,12 @@ def draw_bounding_rect(use_brect, image, brect):
 
 point1 = (0,0)
 point2 = (0,0)
+open_hand = True
 
 def get_bezier_points(image, brect, handedness, hand_sign_text,
                       finger_gesture_text):
 
-    global point1, point2
+    global point1, point2, open_hand
 
     # Mid Point
     x_m_point = (brect[0] + brect[2])/2
@@ -529,12 +530,16 @@ def get_bezier_points(image, brect, handedness, hand_sign_text,
     # Line thickness
     thickness = 0
     if "Open" in hand_sign_text:
-        thickness = 4
+        open_hand = True
     if "Close" in hand_sign_text:
-        if point1 == (0,0):
-            point1 = mid_point
-        elif point2 == (0,0):
-            point2 = mid_point
+        if open_hand:
+            if point1 == (0,0):
+                point1 = mid_point
+            elif point2 == (0,0):
+                point2 = mid_point
+            open_hand = False
+
+    print(point2)
 
 
 def draw_info_text(image, brect, handedness, hand_sign_text,
