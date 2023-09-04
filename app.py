@@ -61,7 +61,7 @@ def main():
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
-        max_num_hands=1,
+        max_num_hands=2,
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
@@ -168,6 +168,14 @@ def main():
                     keypoint_classifier_labels[hand_sign_id],
                     point_history_classifier_labels[most_common_fg_id[0][0]],
                 )
+                #debug_image = draw_circle(
+                #    debug_image,
+                #    brect,
+                #    handedness,
+                #    keypoint_classifier_labels[hand_sign_id],
+                #    point_history_classifier_labels[most_common_fg_id[0][0]],
+                #)
+
         else:
             point_history.append([0, 0])
 
@@ -488,6 +496,32 @@ def draw_bounding_rect(use_brect, image, brect):
         # 外接矩形
         cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[3]),
                      (0, 0, 0), 1)
+
+    return image
+
+def draw_circle(image, brect, handedness, hand_sign_text,
+                   finger_gesture_text):
+
+    # Mid Point
+    x_m_point = (brect[0] + brect[2])/2
+    y_m_point = (brect[1] + brect[3])/2
+    mid_point = (int(x_m_point), int(y_m_point))
+
+    # Radius of circle
+    radius = 30
+    # Red color in BGR
+    color = (0, 0, 255)
+
+    # Line thickness
+    thickness = 0
+    if "Open" in hand_sign_text:
+        thickness = 4
+    if "Close" in hand_sign_text:
+        thickness = -1
+
+    if (x_m_point > radius and y_m_point > radius):
+        print(x_m_point, y_m_point)
+        cv.circle(image, mid_point, radius, color, thickness)
 
     return image
 
