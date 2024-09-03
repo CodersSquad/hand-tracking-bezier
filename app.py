@@ -186,14 +186,8 @@ def main():
         debug_image = draw_point_history(debug_image, point_history)
         debug_image = draw_info(debug_image, fps, mode, number)
 
-        if point1[0] != 0:
-            cv.circle(debug_image, point1, 30, (0,0,255), -1)
-        if point2[0] != 0:
-            cv.circle(debug_image, point2, 30, (255,0,0), -1)
-        if point3[0] != 0:
-            cv.circle(debug_image, point3, 30, (0,255,0), -1)
-        if point4[0] != 0:
-            cv.circle(debug_image, point4, 30, (255,255,0), -1)
+        for point in bezier_points:
+            cv.circle(debug_image, point, 10, (0,255,0), -1)
 
         # 画面反映 #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
@@ -512,43 +506,29 @@ def draw_bounding_rect(use_brect, image, brect):
 
     return image
 
-point1 = (0,0)
-point2 = (0,0)
-point3 = (0,0)
-point4 = (0,0)
+bezier_points = []
 open_hand = True
 
 def get_bezier_points(image, brect, handedness, hand_sign_text,
                       finger_gesture_text):
 
-    global point1, point2, point3, point4, open_hand
+    global open_hand, bezier_points
 
     # Mid Point
     x_m_point = (brect[0] + brect[2])/2
     y_m_point = (brect[1] + brect[3])/2
     mid_point = (int(x_m_point), int(y_m_point))
 
-    # Radius of circle
-    radius = 30
-    # Red color in BGR
-    color = (0, 0, 255)
-
     if "Open" in hand_sign_text:
         open_hand = True
     if "Close" in hand_sign_text:
         if open_hand:
-            if point1 == (0,0):
-                point1 = mid_point
-            elif point2 == (0,0):
-                point2 = mid_point
-            elif point3 == (0,0):
-                point3 = mid_point
-            elif point4 == (0,0):
-                point4 = mid_point
+            if len(bezier_points) < 4:
+                bezier_points.append(mid_point)
+
             open_hand = False
 
-    print(point2)
-
+    print(bezier_points)
 
 def draw_info_text(image, brect, handedness, hand_sign_text,
                    finger_gesture_text):
