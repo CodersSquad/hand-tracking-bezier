@@ -517,15 +517,13 @@ def get_bezier_ctrl_points(image, brect, handedness, hand_sign_text,
     if "Open" in hand_sign_text:
         open_hand = True
     if "Close" in hand_sign_text:
-        if open_hand:
-            if len(bezier_ctrl_points) < 4:
-                for point in bezier_ctrl_points:
-                    dist = euclidian_distance(mid_point, point)
-                    if dist <= 50:
-                        return
-                bezier_ctrl_points.append(mid_point)
+        if len(bezier_ctrl_points) < 4:
+            for point in bezier_ctrl_points:
+                dist = euclidian_distance(mid_point, point)
+                if dist <= 50:
+                    return
+            bezier_ctrl_points.append(mid_point)
 
-            open_hand = False
 
     print(bezier_ctrl_points)
 
